@@ -41,6 +41,7 @@ def analyze_upstream_basin(asc_file_path, col, row, threshold, xytype='index', t
     else:
         # Extract catchment area when using grid index coordinates
         catch = grid.catchment(x=col, y=row, fdir=fdir, xytype=xytype)
+        x, y = col, row
         acc = grid.accumulation(fdir)
     
     # Optionally clip the catchment area
@@ -55,7 +56,7 @@ def analyze_upstream_basin(asc_file_path, col, row, threshold, xytype='index', t
     plt.imshow(catchment_data, cmap='Blues', interpolation='nearest')
     plt.imshow(np.where(acc > threshold, threshold, acc), cmap='binary', interpolation='nearest', alpha=0.7)
     plt.colorbar(label='Catchment Area')
-    plt.title('Upstream Basin from Specified Outlet')
+    plt.title(f'Upstream Basin from Specified Outlet: X={x}, Y={y}')
     plt.show()
 
 # Example usage
