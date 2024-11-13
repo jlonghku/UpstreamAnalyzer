@@ -80,6 +80,12 @@ The function will produce a plot displaying the upstream basin and flow accumula
 
 The visualization provides a clear indication of the upstream area that contributes to the specified outlet point.
 
+## Example Outputs
+
+The following images represent typical outputs from the function:
+
+![Upstream Basin from Specified Outlet](img/Figure_1.png)  
+*Figure: Upstream Basin from Specified Outlet*
 
 ## Notes
 - Ensure that the DEM ASCII file is accessible and correctly formatted.
