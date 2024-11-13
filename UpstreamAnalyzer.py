@@ -47,6 +47,7 @@ def analyze_upstream_basin(asc_file_path, col, row, threshold, xytype='index', t
     # Optionally clip the catchment area
     if clip_to:
         grid.clip_to(catch)
+        acc = grid.accumulation(fdir)
       
     # View catchment data
     catchment_data = grid.view(catch)
@@ -58,7 +59,7 @@ def analyze_upstream_basin(asc_file_path, col, row, threshold, xytype='index', t
     plt.colorbar(label='Catchment Area')
     plt.title(f'Upstream Basin from Specified Outlet: X={x}, Y={y}')
     plt.show()
-
+    
 # Example usage
 threshold = 500
 asc_file_path = 'WA_Samish/Data_Inputs90m/m_1_DEM/Samish_DredgeMask_EEX.asc'
@@ -69,4 +70,5 @@ analyze_upstream_basin(asc_file_path, col, row, threshold, xytype='index')
 
 # Example usage 2: Using geographic coordinates with transformation
 lat, long = 48.54594127, -122.3382169 
-analyze_upstream_basin(asc_file_path, long, lat, threshold, xytype='coordinate', target_crs="EPSG:32610")
+target_crs="EPSG:32610"
+analyze_upstream_basin(asc_file_path, long, lat, threshold, xytype='coordinate', target_crs=target_crs)
