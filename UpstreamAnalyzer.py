@@ -3,16 +3,22 @@ from pysheds.grid import Grid
 import matplotlib.pyplot as plt
 from pyproj import Transformer
 
-def analyze_upstream_basin(asc_file_path, col, row, threshold, xytype='index', target_crs=None, source_crs=None, clip_to=False):
+def analyze_upstream_basin(asc_file_path, col, row, threshold, xytype='index', target_crs=None, source_crs=None, clip_to=False,new_asc_file_path=None):
     # Initialize Grid and add DEM data
     grid = Grid.from_ascii(asc_file_path)
     dem = grid.read_ascii(asc_file_path)
-
+    
+    # Fill pits in DEM
+    pit_filled_dem = grid.fill_pits(dem)
+    
     # Fill depressions in DEM
-    flooded_dem = grid.fill_depressions(dem)
-
+    flooded_dem = grid.fill_depressions(pit_filled_dem)
+    
     # Resolve flat areas in DEM
     inflated_dem = grid.resolve_flats(flooded_dem)
+    
+    if new_asc_file_path is not None:
+        grid.to_ascii(inflated_dem, new_asc_file_path)
 
     # Compute flow direction
     fdir = grid.flowdir(inflated_dem)
@@ -61,14 +67,15 @@ def analyze_upstream_basin(asc_file_path, col, row, threshold, xytype='index', t
     plt.show()
     
 # Example usage
-threshold = 500
+threshold = 1000
 asc_file_path = 'WA_Samish/Data_Inputs90m/m_1_DEM/Samish_DredgeMask_EEX.asc'
 
 # Example usage 1: Using grid index coordinates
 col, row = 108, 207
 analyze_upstream_basin(asc_file_path, col, row, threshold, xytype='index')
 
-# Example usage 2: Using geographic coordinates with transformation
+# Example usage 2: Using geographic coordinates with transformation and saving processed asc file to a new file
 lat, long = 48.54594127, -122.3382169 
 target_crs="EPSG:32610"
-analyze_upstream_basin(asc_file_path, long, lat, threshold, xytype='coordinate', target_crs=target_crs)
+new_asc_file_path = 'New_Samish.asc'
+analyze_upstream_basin(asc_file_path, long, lat, threshold, xytype='coordinate', target_crs=target_crs, new_asc_file_path=new_asc_file_path)

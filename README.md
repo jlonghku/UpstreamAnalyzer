@@ -4,31 +4,32 @@ This guide offers instructions for utilizing the tool to delineate upstream catc
 
 ## Requirements
 To use the code, make sure you have installed the following Python packages:
-- **numpy** (`pip install numpy`)
-- **pysheds** (`pip install pysheds`)
-- **matplotlib** (`pip install matplotlib`)
-- **pyproj** (`pip install pyproj`)
+- **numpy** (pip install numpy)
+- **pysheds** (pip install pysheds)
+- **matplotlib** (pip install matplotlib)
+- **pyproj** (pip install pyproj)
 
 ## Function Overview
 
 ```python
-analyze_upstream_basin(asc_file_path, col, row, threshold, xytype='index', target_crs=None, source_crs=None, clip_to=False)
+analyze_upstream_basin(asc_file_path, col, row, threshold, xytype='index', target_crs=None, source_crs=None, clip_to=False, new_asc_file_path=None)
 ```
 
-The `analyze_upstream_basin` function calculates and visualizes the upstream catchment area using a DEM data file in ASCII format.
+The analyze_upstream_basin function calculates and visualizes the upstream catchment area using a DEM data file in ASCII format.
 
 ### Parameters
 - **asc_file_path** (str): Path to the DEM ASCII file.
 - **col** (int/float): Column coordinate or longitude value.
 - **row** (int/float): Row coordinate or latitude value.
 - **threshold** (int): Minimum flow accumulation threshold for identifying high-accumulation cells.
-- **xytype** (str, optional): Type of coordinates used. Set to `'index'` for grid cell indices or `'coordinate'` for geographic coordinates. Default is `'index'`.
-- **target_crs** (str, optional): EPSG code of the target coordinate reference system for transformation (e.g., "EPSG:32610"). Only applicable if **xytype** is set to `'coordinate'`.
-- **source_crs** (str, optional): EPSG code of the source coordinate reference system (default is "EPSG:4326"). Only applicable if **xytype** is set to `'coordinate'`.
-- **clip_to** (bool, optional): If set to `True`, the catchment area will be clipped for visualization.
+- **xytype** (str, optional): Type of coordinates used. Set to 'index' for grid cell indices or 'coordinate' for geographic coordinates. Default is 'index'.
+- **target_crs** (str, optional): EPSG code of the target coordinate reference system for transformation (e.g., "EPSG:32610"). Only applicable if **xytype** is set to 'coordinate'.
+- **source_crs** (str, optional): EPSG code of the source coordinate reference system (default is "EPSG:4326"). Only applicable if **xytype** is set to 'coordinate'.
+- **clip_to** (bool, optional): If set to True, the catchment area will be clipped for visualization.
+- **new_asc_file_path** (str, optional): Path to save the processed DEM file in ASCII format. If specified, the filled and resolved DEM will be saved to this path.
 
 ### Output
-The function displays a plot of the upstream catchment area. The plot includes a color-coded representation of the catchment with flow accumulation.
+The function displays a plot of the upstream catchment area. The plot includes a color-coded representation of the catchment with flow accumulation. If **new_asc_file_path** is provided, the processed DEM will be saved to the specified file.
 
 ## Instructions
 
@@ -57,20 +58,22 @@ asc_file_path = 'WA_Samish/Data_Inputs90m/m_1_DEM/Samish_DredgeMask_EEX.asc'
 lat, long = 48.54594127, -122.3382169
 threshold = 500
 
-# Call the function with coordinate transformation
+# Call the function with coordinate transformation and save processed DEM to a new file
 target_crs = "EPSG:32610"
-analyze_upstream_basin(asc_file_path, long, lat, threshold, xytype='coordinate', target_crs=target_crs)
+new_asc_file_path = 'New_Samish.asc'
+analyze_upstream_basin(asc_file_path, long, lat, threshold, xytype='coordinate', target_crs=target_crs, new_asc_file_path=new_asc_file_path)
 ```
 
 ### 2. Explanation of Processing Steps
 
 1. **Initialize Grid and Read DEM**: The DEM data is read using PySheds.
-2. **Fill Depressions and Resolve Flats**: Depressions in the DEM are filled, and flat areas are resolved to ensure proper flow direction calculations.
-3. **Compute Flow Direction**: Flow direction is computed using the DEM.
-4. **Extract Upstream Basin**:
+2. **Fill Pits in DEM**: Pits (local depressions) in the DEM are filled to ensure proper flow direction calculations.
+3. **Fill Depressions and Resolve Flats**: Depressions in the DEM are filled, and flat areas are resolved to ensure proper flow direction calculations. The processed DEM can be saved to a new file if specified.
+4. **Compute Flow Direction**: Flow direction is computed using the DEM.
+5. **Extract Upstream Basin**:
    - If using **xytype = 'coordinate'**, the specified outlet point is snapped to the nearest high-accumulation cell, and coordinates are optionally transformed using the specified CRS.
    - If using **xytype = 'index'**, the outlet point is treated as a grid cell index.
-5. **Visualize Catchment Area**: The catchment area is visualized along with flow accumulation data.
+6. **Visualize Catchment Area**: The catchment area is visualized along with flow accumulation data.
 
 ### 3. Visualization
 The function will produce a plot displaying the upstream basin and flow accumulation values.
@@ -91,6 +94,7 @@ The following images represent typical outputs from the function:
 - Ensure that the DEM ASCII file is accessible and correctly formatted.
 - The **threshold** value affects the snapping process for geographic coordinates; a higher value will snap the outlet point to cells with greater flow accumulation.
 - The coordinate transformation is performed using the PyProj library.
+- If **new_asc_file_path** is provided, the processed DEM file will be saved for further use.
 
 ## Troubleshooting
 - **FileNotFoundError**: Verify that the provided DEM file path is correct.
