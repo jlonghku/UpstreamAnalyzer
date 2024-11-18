@@ -25,7 +25,7 @@ analyze_upstream_basin(asc_file_path, col, row, threshold, xytype='index', crs='
 - **row** (int/float): Row coordinate or latitude value.
 - **threshold** (int): Minimum flow accumulation threshold for identifying high-accumulation cells.
 - **xytype** (str, optional): Type of coordinates used. Set to 'index' for grid cell indices or 'coordinate' for geographic coordinates. Default is 'index'.
-- **crs** (str, optional): EPSG code of the coordinate reference system (e.g., "EPSG:32610"). Only applicable if **xytype** is set to 'coordinate'. Default is "EPSG:4326".
+- **crs** (str, optional): EPSG code of the coordinate reference system (e.g., "EPSG:32610"). Default is "EPSG:4326".
 - **clip_to** (bool, optional): If set to True, the catchment area will be clipped for visualization.
 - **new_asc_file_path** (str, optional): Path to save the processed DEM file in ASCII format. If specified, the filled and resolved DEM will be saved to this path.
 
