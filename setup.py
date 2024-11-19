@@ -4,7 +4,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='upstream_analyzer',
-    version='0.1.0',
+    version='0.1.1',
     author='Long Jiang',
     author_email='jlong@connect.hku.hk',
     description='A Python package for analyzing upstream basins and resampling DEM data',
