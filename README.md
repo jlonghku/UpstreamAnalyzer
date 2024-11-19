@@ -5,11 +5,18 @@ This guide provides instructions for using the tool to delineate upstream catchm
 ## Requirements
 
 To use this tool, ensure you have the following Python packages installed:
+
 - **numpy**: `pip install numpy`
 - **pysheds**: `pip install pysheds`
 - **matplotlib**: `pip install matplotlib`
 - **scipy**: `pip install scipy`
 - **pyproj**: `pip install pyproj`
+
+## Installation
+
+To install this tool, run the following command:
+
+- **upstream\_analyzer**: `pip install upstream_analyzer`
 
 ## Function Overview
 
@@ -22,17 +29,19 @@ analyze_upstream_basin(asc_file_path, col, row, threshold, xytype='index', crs='
 ```
 
 #### Parameters
-- **asc_file_path** (str): Path to the DEM ASCII file.
+
+- **asc\_file\_path** (str): Path to the DEM ASCII file.
 - **col** (int/float): Column coordinate or longitude value.
 - **row** (int/float): Row coordinate or latitude value.
 - **threshold** (int): Minimum flow accumulation threshold for identifying high-accumulation cells.
 - **xytype** (str, optional): Type of coordinates used. Set to 'index' for grid cell indices or 'coordinate' for geographic coordinates. Default is 'index'.
 - **crs** (str, optional): EPSG code of the coordinate reference system (e.g., "EPSG:32610"). Default is "EPSG:4326".
-- **clip_to** (bool, optional): If set to True, the catchment area will be clipped for visualization.
-- **new_asc_file_path** (str, optional): Path to save the processed DEM file in ASCII format. If specified, the filled and resolved DEM will be saved to this path.
+- **clip\_to** (bool, optional): If set to True, the catchment area will be clipped for visualization.
+- **new\_asc\_file\_path** (str, optional): Path to save the processed DEM file in ASCII format. If specified, the filled and resolved DEM will be saved to this path.
 
 #### Output
-The function displays a plot of the upstream catchment area. The plot includes a color-coded representation of the catchment with flow accumulation. If **new_asc_file_path** is provided, the processed DEM will be saved to the specified file.
+
+The function displays a plot of the upstream catchment area. The plot includes a color-coded representation of the catchment with flow accumulation. If **new\_asc\_file\_path** is provided, the processed DEM will be saved to the specified file.
 
 ### Resample DEM
 
@@ -43,21 +52,25 @@ resample_dem(input_asc, resample_asc, crs="EPSG:4326", scale_factor=0.5, interpo
 ```
 
 #### Parameters
-- **input_asc** (str): Path to the input DEM ASCII file.
-- **resample_asc** (str): Path to save the resampled DEM ASCII file.
+
+- **input\_asc** (str): Path to the input DEM ASCII file.
+- **resample\_asc** (str): Path to save the resampled DEM ASCII file.
 - **crs** (str, optional): EPSG code of the coordinate reference system (e.g., "EPSG:32610"). Default is "EPSG:4326".
-- **scale_factor** (float, optional): Scaling factor for resampling. Default is 0.5 (reduces resolution by half).
-- **interpolation_order** (int, optional): Interpolation method to use (0 - nearest, 1 - bilinear, etc.). Default is 1.
+- **scale\_factor** (float, optional): Scaling factor for resampling. Default is 0.5 (reduces resolution by half).
+- **interpolation\_order** (int, optional): Interpolation method to use (0 - nearest, 1 - bilinear, etc.). Default is 1.
 
 #### Output
+
 The function saves the resampled DEM to the specified output file.
 
 ## Instructions
 
 ### 1. Analyze Upstream Basin
+
 The function requires a DEM ASCII file path and coordinates for the outlet point. You have two options for specifying the coordinates:
 
 #### Option 1: Using Grid Index Coordinates
+
 Specify the outlet point using grid index coordinates (**col** and **row**).
 
 ```python
@@ -71,6 +84,7 @@ analyze_upstream_basin(asc_file_path, col, row, threshold, xytype='index')
 ```
 
 #### Option 2: Using Geographic Coordinates
+
 Specify the outlet point using geographic coordinates (latitude and longitude) and transform them to the target CRS.
 
 ```python
@@ -86,6 +100,7 @@ analyze_upstream_basin(asc_file_path, long, lat, threshold, xytype='coordinate',
 ```
 
 ### 2. Resample DEM
+
 The `resample_dem` function allows you to resample the resolution of a DEM file to a new ASCII file.
 
 ```python
@@ -109,6 +124,7 @@ resample_dem(input_asc, resample_asc, crs="EPSG:32610", scale_factor=0.5)
 6. **Visualize Catchment Area**: The catchment area and flow accumulation data are visualized.
 
 ### 4. Visualization
+
 The function will produce a plot displaying the upstream basin and flow accumulation values.
 
 - **Blues Color Map**: Indicates the extent of the catchment area.
@@ -120,23 +136,27 @@ The visualization provides a clear indication of the upstream area that contribu
 
 The following images represent typical outputs from the function:
 
-![Upstream Basin from Specified Outlet](https://raw.githubusercontent.com/jlonghku/UpstreamAnalyzer/main/img/Figure_1.png)  
+![Upstream Basin from Specified Outlet](https://raw.githubusercontent.com/jlonghku/UpstreamAnalyzer/main/img/Figure_1.png)
 *Figure: Upstream Basin from Specified Outlet*
 
 ## Notes
+
 - Ensure that the DEM ASCII file is accessible and correctly formatted.
 - The **threshold** value affects the snapping process for geographic coordinates; a higher value will snap the outlet point to cells with greater flow accumulation.
 - The coordinate transformation is performed using the PyProj library.
-- If **new_asc_file_path** is provided, the processed DEM file will be saved for further use.
+- If **new\_asc\_file\_path** is provided, the processed DEM file will be saved for further use.
 
 ## Troubleshooting
+
 - **FileNotFoundError**: Verify that the provided DEM file path is correct.
 - **IndexError**: Ensure the provided coordinates are within the grid bounds.
 - **Coordinate Transformation Issues**: Ensure that the **crs** value is a valid EPSG code.
 
 ## Additional Resources
+
 - [PySheds Documentation](https://pysheds.readthedocs.io/)
 - [PyProj Documentation](https://pyproj4.github.io/pyproj/)
 - [Matplotlib Documentation](https://matplotlib.org/stable/contents.html)
 
 Feel free to customize the parameters as needed to explore different areas of interest within your DEM data!
+
