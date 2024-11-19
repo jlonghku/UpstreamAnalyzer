@@ -1,3 +1,5 @@
+# analyze_basin.py
+
 import numpy as np
 from pysheds.grid import Grid
 from pysheds.sview import Raster, ViewFinder
@@ -6,6 +8,18 @@ from scipy.ndimage import zoom
 from pyproj import Transformer, Proj
 
 def analyze_upstream_basin(asc_file_path, col, row, threshold, xytype='index', crs='EPSG:4326', clip_to=False, new_asc_file_path=None):
+    """
+    Analyze upstream basin from the specified outlet point.
+    
+    Parameters:
+    - asc_file_path (str): Path to the input ASC file.
+    - col, row (int or float): Coordinates of the outlet point.
+    - threshold (float): Threshold for flow accumulation.
+    - xytype (str): 'index' or 'coordinate'.
+    - crs (str): Coordinate Reference System (CRS) for coordinate conversion.
+    - clip_to (bool): Whether to clip the catchment.
+    - new_asc_file_path (str): Path to save the new ASC file (optional).
+    """
     # Initialize the Grid object and add DEM data
     grid = Grid.from_ascii(asc_file_path, crs=Proj(crs))
     dem = grid.read_ascii(asc_file_path, crs=Proj(crs))
@@ -38,16 +52,11 @@ def analyze_upstream_basin(asc_file_path, col, row, threshold, xytype='index', c
         # Snap the pour point to the nearest cell with high accumulation
         col, row = grid.snap_to_mask(acc > threshold, (col, row))
         
-        # Get the nearest cell index
-        x, y = grid.nearest_cell(col, row)
-        print(f"Nearest cell index for the snapped pour point: X={x}, Y={y}")
-        
         # Extract the catchment area based on the pour point
         catch = grid.catchment(x=col, y=row, fdir=fdir, xytype=xytype)
     else:
         # Extract the catchment area when using grid index coordinates
         catch = grid.catchment(x=col, y=row, fdir=fdir, xytype=xytype)
-        x, y = col, row
         acc = grid.accumulation(fdir)
     
     # Optionally clip the catchment area
@@ -63,11 +72,21 @@ def analyze_upstream_basin(asc_file_path, col, row, threshold, xytype='index', c
     plt.imshow(catchment_data, cmap='Blues', interpolation='nearest')
     plt.imshow(np.where(acc > threshold, threshold, acc), cmap='binary', interpolation='nearest', alpha=0.7)
     plt.colorbar(label='Catchment Area')
-    plt.title(f'Upstream Basin from Specified Outlet: X={x}, Y={y}')
+    plt.title(f'Upstream Basin from Specified Outlet: X={col}, Y={row}')
     plt.show()
 
 
 def resample_dem(input_asc, resample_asc, crs="EPSG:4326", scale_factor=0.5, interpolation_order=1):
+    """
+    Resample a DEM to a different resolution.
+    
+    Parameters:
+    - input_asc (str): Path to the input ASC file.
+    - resample_asc (str): Path to save the resampled ASC file.
+    - crs (str): Coordinate Reference System (CRS).
+    - scale_factor (float): Scaling factor for resampling.
+    - interpolation_order (int): Order of interpolation for resampling.
+    """
     # Read the ASC file
     grid = Grid.from_ascii(input_asc, crs=Proj(crs))
     dem = grid.read_ascii(input_asc, crs=Proj(crs))
@@ -91,24 +110,3 @@ def resample_dem(input_asc, resample_asc, crs="EPSG:4326", scale_factor=0.5, int
     newgrid.to_ascii(resampled_raster, resample_asc)
     
     print(f"Resampled DEM has been saved to: {resample_asc}")
-   
-# Example usage
-threshold = 500
-crs = "EPSG:32610"
-asc_file_path = 'WA_Samish/Data_Inputs90m/m_1_DEM/Samish_DredgeMask_EEX.asc'
-new_asc_file_path = 'New_Samish.asc'
-
-# Example usage 1: Using grid index coordinates
-col, row = 108, 207
-analyze_upstream_basin(asc_file_path, col, row, threshold, xytype='index')
-
-# Example usage 2: Using geographic coordinates with transformation and saving the processed ASC file to a new file
-lat, long = 48.54594127, -122.3382169 
-new_asc_file_path = 'New_Samish.asc'
-analyze_upstream_basin(asc_file_path, long, lat, threshold, xytype='coordinate', crs=crs, new_asc_file_path=new_asc_file_path)
-
-# Example usage 3: Resampling DEM and analyzing the upstream basin
-resample_asc = "Resample_dem.asc" 
-resample_dem(asc_file_path, resample_asc, crs=crs, scale_factor=0.5)
-lat, long = 48.54594127, -122.3382169 
-analyze_upstream_basin(resample_asc, long, lat, threshold, xytype='coordinate', crs=crs, new_asc_file_path=new_asc_file_path)

@@ -16,6 +16,8 @@ To use this tool, ensure you have the following Python packages installed:
 ### Analyze Upstream Basin
 
 ```python
+from upstream_analyzer.analyze_basin import analyze_upstream_basin
+
 analyze_upstream_basin(asc_file_path, col, row, threshold, xytype='index', crs='EPSG:4326', clip_to=False, new_asc_file_path=None)
 ```
 
@@ -35,6 +37,8 @@ The function displays a plot of the upstream catchment area. The plot includes a
 ### Resample DEM
 
 ```python
+from upstream_analyzer.analyze_basin import resample_dem
+
 resample_dem(input_asc, resample_asc, crs="EPSG:4326", scale_factor=0.5, interpolation_order=1)
 ```
 
@@ -136,4 +140,3 @@ The following images represent typical outputs from the function:
 - [Matplotlib Documentation](https://matplotlib.org/stable/contents.html)
 
 Feel free to customize the parameters as needed to explore different areas of interest within your DEM data!
-
