@@ -54,6 +54,11 @@ def analyze_upstream_basin(asc_file_path, col, row, threshold, xytype='index', c
         
         # Extract the catchment area based on the pour point
         catch = grid.catchment(x=col, y=row, fdir=fdir, xytype=xytype)
+        
+        # Get the nearest cell index
+        col, row = grid.nearest_cell(col, row)
+        print(f"Nearest cell index for the snapped pour point: X={col}, Y={row}")
+        
     else:
         # Extract the catchment area when using grid index coordinates
         catch = grid.catchment(x=col, y=row, fdir=fdir, xytype=xytype)
