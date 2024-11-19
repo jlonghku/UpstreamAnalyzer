@@ -10,7 +10,7 @@ setup(
     description='A Python package for analyzing upstream basins and resampling DEM data',
     long_description=open('README.md').read(),
     long_description_content_type='text/markdown',
-    url='https://github.com/your_username/upstream_analyzer',
+    url='https://github.com/jlonghku/UpstreamAnalyzer',
     packages=find_packages(),
     install_requires=[
         'numpy',

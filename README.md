@@ -120,7 +120,7 @@ The visualization provides a clear indication of the upstream area that contribu
 
 The following images represent typical outputs from the function:
 
-![Upstream Basin from Specified Outlet](img/Figure_1.png)  
+![Upstream Basin from Specified Outlet](https://raw.githubusercontent.com/jlonghku/UpstreamAnalyzer/main/img/Figure_1.png)  
 *Figure: Upstream Basin from Specified Outlet*
 
 ## Notes
