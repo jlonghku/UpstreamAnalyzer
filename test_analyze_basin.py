@@ -6,9 +6,9 @@ crs = "EPSG:32610"
 asc_file_path = 'WA_Samish/Data_Inputs90m/m_1_DEM/Samish_DredgeMask_EEX.asc'
 new_asc_file_path = 'New_Samish.asc'
 
-# Example usage 1: Using grid index coordinates
+# Example usage 1: Using grid index coordinates and clipping
 col, row = 108, 207
-analyze_upstream_basin(asc_file_path, col, row, threshold, xytype='index')
+analyze_upstream_basin(asc_file_path, col, row, threshold, xytype='index',clip_to=True)
 
 # Example usage 2: Using geographic coordinates with transformation and saving the processed ASC file to a new file
 lat, long = 48.54594127, -122.3382169 

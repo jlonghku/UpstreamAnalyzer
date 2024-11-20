@@ -32,10 +32,6 @@ def analyze_upstream_basin(asc_file_path, col, row, threshold, xytype='index', c
     
     # Resolve flat areas in the DEM
     inflated_dem = grid.resolve_flats(flooded_dem)
-    
-    # Optionally save the processed DEM to a new ASC file
-    if new_asc_file_path is not None:
-        grid.to_ascii(inflated_dem, new_asc_file_path)
 
     # Compute flow direction
     fdir = grid.flowdir(inflated_dem)
@@ -68,7 +64,11 @@ def analyze_upstream_basin(asc_file_path, col, row, threshold, xytype='index', c
     if clip_to:
         grid.clip_to(catch)
         acc = grid.accumulation(fdir)
-      
+    
+    # Optionally save the processed DEM to a new ASC file
+    if new_asc_file_path is not None:
+        grid.to_ascii(inflated_dem, new_asc_file_path)
+        
     # View the catchment data
     catchment_data = grid.view(catch)
     
