@@ -85,7 +85,7 @@ analyze_upstream_basin(asc_file_path, col, row, threshold, xytype='index')
 
 #### Option 2: Using Geographic Coordinates
 
-Specify the outlet point using geographic coordinates (latitude and longitude) and transform them to the target CRS.
+Specify the outlet point using geographic coordinates (latitude and longitude) and transform them to grid index coordinates.
 
 ```python
 # Define the input parameters
@@ -94,9 +94,9 @@ lat, long = 48.54594127, -122.3382169
 threshold = 500
 
 # Call the function with coordinate transformation and save processed DEM to a new file
-target_crs = "EPSG:32610"
+crs = "EPSG:32610"
 new_asc_file_path = 'New_Samish.asc'
-analyze_upstream_basin(asc_file_path, long, lat, threshold, xytype='coordinate', crs=target_crs, new_asc_file_path=new_asc_file_path)
+analyze_upstream_basin(asc_file_path, long, lat, threshold, xytype='coordinate', crs=crs, new_asc_file_path=new_asc_file_path)
 ```
 
 ### 2. Resample DEM
